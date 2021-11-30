@@ -1,11 +1,14 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from 'react';
-import { ColorSchemeName, Pressable, Text, View, Image, useWindowDimensions, BackHandler, } from 'react-native';
+import { Pressable, Text, View, Image, useWindowDimensions, } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/core';
+import { getAuth } from '@firebase/auth';
 
 import ChatRoomScreen from '../screens/ChatRoomScreen';
 import HomeScreen from '../screens/HomeScreen';
+import UsersScreen from '../screens/UsersScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +18,7 @@ export default function MainNavigator({ app }) {
             <Stack.Screen
                 name="Home"
                 component={HomeScreen}
-                options={{ headerTitle: HomeHeader }}
+                options={{ headerTitle: (app) => HomeHeader(app) }}
                 app={app}
             />
             <Stack.Screen
@@ -23,12 +26,20 @@ export default function MainNavigator({ app }) {
                 component={ChatRoomScreen}
                 options={{ headerTitle: ChatRoomHeader, headerBackTitleVisible: false }}
             />
+            <Stack.Screen
+                name="Users"
+                component={UsersScreen}
+                options={{ title: "Users" }}
+                app={app}
+            />
         </Stack.Navigator>
     );
 }
 
-const HomeHeader = (props) => {
+const HomeHeader = ({ app }) => {
     const { width } = useWindowDimensions();
+    const navigation = useNavigation();
+    const user = getAuth(app).currentUser;
 
     return (
         <View 
@@ -42,12 +53,14 @@ const HomeHeader = (props) => {
             }}
         >
         <Image
-            source={{ uri: "https://picsum.photos/500/500" }}
+            source={{ uri: user.photoURL }}
             style={{ width: 30, height: 30, borderRadius: 30 }} 
         />
-        <Text style={{ flex: 1, textAlign: "center", marginLeft: 50, fontWeight: "bold" }} > Signal </Text>
+        <Text style={{ flex: 1, textAlign: "center", marginLeft: 50, fontWeight: "bold" }} > Messaging App </Text>
         <Feather name="camera" size={24} color="black" style={{ marginHorizontal: 10 }} />
-        <Feather name="edit-2" size={24} color="black" style={{ marginHorizontal: 10 }} />
+        <Pressable onPress={() => navigation.navigate('Users')} >
+            <Feather name="edit-2" size={24} color="black" style={{ marginHorizontal: 10 }} />
+        </Pressable>
         </View>
     );
 };

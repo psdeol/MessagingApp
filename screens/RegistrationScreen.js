@@ -37,9 +37,10 @@ export default function RegistrationScreen({ navigation, app }) {
             const auth = getAuth(app);
             await createUserWithEmailAndPassword(auth, email, password);
             const currentUser = auth.currentUser;
+            let num = Math.floor(Math.random() * (200 - 1 + 1)) + 1;
             await updateProfile(currentUser, {
                 displayName: name,
-                photoURL: "https://picsum.photos/500/500"
+                photoURL: `https://picsum.photos/id/${num}/300/300`
             })
             
             const db = getFirestore(app);
@@ -47,7 +48,8 @@ export default function RegistrationScreen({ navigation, app }) {
                 id: currentUser.uid,
                 email: currentUser.email,
                 name: currentUser.displayName,
-                photoURL: currentUser.photoURL
+                photoURL: currentUser.photoURL,
+                rooms: [],
             });
             
         } catch (error) {
