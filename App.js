@@ -10,13 +10,13 @@ import { initializeApp } from 'firebase/app'
 //import { getAnalytics } from 'firebase/analytics'
 
 const firebaseConfig = {
-  apiKey: API_KEY,
-  authDomain: AUTH_DOMAIN,
-  projectId: PROJECT_ID,
-  storageBucket: STORAGE_BUCKET,
-  messagingSenderId: MESSAGING_SENDER_ID,
-  appId: APP_ID,
-  measurementId: MEASUREMENT_ID,
+    apiKey: API_KEY,
+    authDomain: AUTH_DOMAIN,
+    projectId: PROJECT_ID,
+    storageBucket: STORAGE_BUCKET,
+    messagingSenderId: MESSAGING_SENDER_ID,
+    appId: APP_ID,
+    measurementId: MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
@@ -25,19 +25,19 @@ const app = initializeApp(firebaseConfig);
 LogBox.ignoreLogs(["Setting a timer"]);
 
 export default function App() {
-  return (
-    <SafeAreaProvider>
-      <Navigation app={app} />
-      <StatusBar />
-    </SafeAreaProvider>
-  );
+    return (
+        <SafeAreaProvider>
+        <Navigation app={app} />
+        <StatusBar />
+        </SafeAreaProvider>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });

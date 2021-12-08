@@ -10,8 +10,6 @@ export default function ChatRoomScreen() {
     const route = useRoute();
     const navigation = useNavigation();
 
-    navigation.setOptions({ title: 'Elon Musk' });
-
     return (
         <SafeAreaView style={styles.page}>
             <FlatList

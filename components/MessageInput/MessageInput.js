@@ -27,7 +27,7 @@ const MessageInput = () => {
         <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={100}>
             <View style={styles.inputContainer}>
                 <SimpleLineIcons name="emotsmile" size={24} color="#595959" style={styles.icon} />
-                <TextInput style={styles.input} value={message} onChangeText={(newMessage) => setMessage(newMessage)} placeholder="Signal message" />
+                <TextInput style={styles.input} value={message} onChangeText={(newMessage) => setMessage(newMessage)} placeholder="Send message" />
                 <Feather name="camera" size={24} color="#595959" style={styles.icon} />
                 <MaterialCommunityIcons name="microphone-outline" size={24} color="#595959" style={styles.icon} />
             </View>

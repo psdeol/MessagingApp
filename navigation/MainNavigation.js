@@ -9,6 +9,7 @@ import { getAuth } from '@firebase/auth';
 import ChatRoomScreen from '../screens/ChatRoomScreen';
 import HomeScreen from '../screens/HomeScreen';
 import UsersScreen from '../screens/UsersScreen';
+import ChatRoomHeader from '../components/ChatRoomHeader';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,7 +25,10 @@ export default function MainNavigator({ app }) {
             <Stack.Screen
                 name="ChatRoom"
                 component={ChatRoomScreen}
-                options={{ headerTitle: ChatRoomHeader, headerBackTitleVisible: false }}
+                options={({ route }) => ({
+                    headerTitle: () => <ChatRoomHeader app={app} id={route.params?.id} />,
+                    headerBackTitleVisible: false,
+                })}
             />
             <Stack.Screen
                 name="Users"
@@ -65,27 +69,4 @@ const HomeHeader = ({ app }) => {
     );
 };
 
-const ChatRoomHeader = (props) => {
-    const { width } = useWindowDimensions();
 
-    return (
-        <View
-            style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: width - 40,
-                padding: 10,
-                alignItems: "center",
-                marginRight: 170,
-            }}
-        >
-        <Image
-            source={{ uri: "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg" }}
-            style={{ width: 30, height: 30, borderRadius: 30 }}
-        />
-        <Text style={{ flex: 1, marginLeft: 10, fontWeight: "bold" }}> {props.children} </Text>
-        <Feather name="camera" size={24} color="black" style={{ marginHorizontal: 10 }} />
-        <Feather name="edit-2" size={24} color="black" style={{ marginHorizontal: 10 }} />
-        </View>
-    );
-};
