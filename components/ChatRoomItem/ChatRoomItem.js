@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Image, Text, Pressable } from 'react-native';
 import { useNavigation } from "@react-navigation/core";
+import { doc, onSnapshot, getFirestore } from "firebase/firestore";
 import { getAuth } from "@firebase/auth";
 import styles from "./styles";
 
@@ -11,16 +12,33 @@ export default function ChatRoomItem({ app, chatRoom }) {
     const navigation = useNavigation();
 
     useEffect(() => {
-        const getUsers = async () => {
+        if (!chatRoom) return;
+
+        let mounted = true;
+
+        const fetchChatRoom = async () => {
             const authUser = getAuth(app).currentUser;
-            setUser(chatRoom.users.filter(u => u.id !== authUser.uid)[0]);
-            if (chatRoom.lastMessage)
-                setTimestamp(chatRoom.lastMessage?.createdAt.toString());
-            else
-                setTimestamp(chatRoom.createdAt?.toString());
-            setMessage(chatRoom.lastMessage?.content);
+
+            if (mounted) 
+                setUser(chatRoom.users.filter(u => u.id !== authUser.uid)[0]);
+
+            const room = onSnapshot(doc(getFirestore(app), 'rooms', chatRoom.id), (doc) => {
+                if (mounted) {
+                    setMessage(doc.data().lastMessage?.content);
+
+                    if (doc.data().lastMessage)
+                        setTimestamp(doc.data().lastMessage.createdAt.toString());
+                    else
+                        setTimestamp(doc.data().createdAt.toString());
+                }
+            });
         }
-        getUsers();
+
+        fetchChatRoom();
+        
+        return () => {
+            mounted = false;
+        }
     }, []);
 
     const onPress = () => {
@@ -31,11 +49,12 @@ export default function ChatRoomItem({ app, chatRoom }) {
         <Pressable onPress={onPress} style={styles.container}>
             <Image source={{uri: user?.photoURL}} style={styles.image} />
             {chatRoom.newMessages ? 
-            <View style={styles.badgeContainer}>
-                <Text style={styles.badgeText}>{chatRoom.newMessages}</Text>
-            </View> 
-            : 
-            null}
+                <View style={styles.badgeContainer}>
+                    <Text style={styles.badgeText}>{chatRoom.newMessages}</Text>
+                </View> 
+                : 
+                null
+            }
             <View style={styles.rightContainer}>
                 <View style={styles.row}>
                     <Text style={styles.name}>{user?.name}</Text>

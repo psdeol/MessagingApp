@@ -8,20 +8,10 @@ export default function HomeScreen({ app }) {
     const [rooms, setRooms] = useState(null);
     
     useEffect(() => {
+        let mounted = true;
+
         const fetchChatRooms = async () => {
-            /*
-            const currentUser = getAuth(app).currentUser;
-            const querySnapshot = await getDocs(query(collection(getFirestore(app), "rooms")));
-            const roomsList = [];
-
-            querySnapshot.forEach((doc) => {
-                if (doc.data().users.filter(u => u.id === currentUser.uid).length > 0) {
-                    roomsList.push(doc.data());
-                }
-            });
-
-            setRooms(roomsList);
-            */
+            // listen for new rooms created with current user
             const q = query(collection(getFirestore(app), "rooms"));
             const snapshot = onSnapshot(q, (querySnapshot) => {
                 const roomsList = [];
@@ -32,11 +22,16 @@ export default function HomeScreen({ app }) {
                     }
                 })
                 
-                setRooms(roomsList);
+                if (mounted) setRooms(roomsList);
             })
         }
 
         fetchChatRooms();
+
+        return () => {
+            mounted = false;
+        }
+        
     }, []);    
 
     const logout = async () => {

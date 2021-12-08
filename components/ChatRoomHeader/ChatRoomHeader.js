@@ -11,6 +11,8 @@ const ChatRoomHeader = ({ app, id }) => {
     useEffect(() => {
         if (!id) return;
 
+        let mounted = true;
+
         const fetchUsers = async () => {
             const db = getFirestore(app);
             const authUser = getAuth(app).currentUser;
@@ -19,7 +21,7 @@ const ChatRoomHeader = ({ app, id }) => {
             if (room.exists()) {
                 room.data().users.forEach((u) => {
                     if (u.id !== authUser.uid) {
-                        setUser(u);
+                        if (mounted) setUser(u);
                         return;
                     }
                 })
@@ -29,6 +31,10 @@ const ChatRoomHeader = ({ app, id }) => {
         }
 
         fetchUsers();
+
+        return () => {
+            mounted = false;
+        }
 
     }, []);
 

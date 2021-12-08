@@ -13,40 +13,28 @@ export default function ChatRoomScreen({ app }) {
     const navigation = useNavigation();
 
     useEffect(() => {
-        const fetchChatRoom = async () => {
+        let mounted = true;
+
+        const fetchMessages = async () => {
             if (!route.params?.id) {
                 console.log("No chatroom id provided");
                 return;
             }
             
             const room = onSnapshot(doc(getFirestore(app), 'rooms', route.params?.id), (doc) => {
-                setChatRoom(doc.data());
-                setMessages(doc.data().messages.reverse());
+                if (mounted) {
+                    setChatRoom(doc.data());
+                    setMessages(doc.data().messages.reverse());
+                }
             });
-
-            /*
-            if (room.exists())
-                setChatRoom(room.data());
-            else
-                console.log("room document not found");
-            */
         }
 
-        fetchChatRoom();
-    }, []);
-
-    /*
-    useEffect(() => {
-        const fetchMessages = async () => {
-            if (!chatRoom) 
-                return;
-            
-            setMessages(chatRoom.messages.reverse());
-        }
-        
         fetchMessages();
+        
+        return () => {
+            mounted = false;
+        }
     }, []);
-    */
 
     if(!chatRoom) {
         return <ActivityIndicator />
