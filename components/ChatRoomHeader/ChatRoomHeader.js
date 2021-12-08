@@ -24,7 +24,7 @@ const ChatRoomHeader = ({ app, id }) => {
                     }
                 })
             } else {
-                console.log("Document not found");
+                console.log("room document not found");
             }
         }
 
@@ -45,9 +45,9 @@ const ChatRoomHeader = ({ app, id }) => {
         >
         <Image
             source={{ uri: user?.photoURL }}
-            style={{ width: 35, height: 35, borderRadius: 30 }}
+            style={{ width: 30, height: 30, borderRadius: 30 }}
         />
-        <Text style={{ flex: 1, marginLeft: 10, fontWeight: "bold", fontSize: 20 }}> {user?.name} </Text>
+        <Text style={{ flex: 1, marginLeft: 10, fontWeight: "bold"}}> {user?.name} </Text>
         <Feather name="camera" size={24} color="black" style={{ marginHorizontal: 10 }} />
         <Feather name="edit-2" size={24} color="black" style={{ marginHorizontal: 10 }} />
         </View>

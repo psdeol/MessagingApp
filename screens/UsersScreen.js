@@ -14,8 +14,9 @@ export default function UsersScreen({ app }) {
             const querySnapshot = await getDocs(query(collection(db, "users")));
             const usersList = [];
             querySnapshot.forEach((doc) => {
+                // don't display current user
                 if (authUser.uid !== doc.data().id)
-                usersList.push(doc.data());
+                    usersList.push(doc.data());
             });
             setUsers(usersList);
         }
@@ -24,11 +25,11 @@ export default function UsersScreen({ app }) {
 
     return (
         <View style={styles.page}>
-        <FlatList 
-            data={users}
-            renderItem={({ item }) => <UserItem user={item} app={app} />}
-            showsVerticalScrollIndicator={false}
-        />
+            <FlatList 
+                data={users}
+                renderItem={({ item }) => <UserItem user={item} app={app} />}
+                showsVerticalScrollIndicator={false}
+            />
         </View>
     );
 }

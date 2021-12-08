@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Image, Text, TextInput, TouchableHighlight, View, ImageBackground } from 'react-native';
+import { StyleSheet, Image, Text, TextInput, TouchableHighlight, View, ImageBackground, ScrollView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
@@ -126,7 +126,7 @@ export default function RegistrationScreen({ navigation, app }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     title: {
 

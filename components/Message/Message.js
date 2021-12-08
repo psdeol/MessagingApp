@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { getAuth } from "@firebase/auth";
 
-const myID = "u1";
+const Message = ({ app, message }) => {
+    const [isMe, setIsMe] = useState(true);
 
-const Message = ({ message }) => {
-    const isMe = message.user.id === myID;
+    useEffect(() => {
+        const checkIfMe = async () => {
+            const authUser = getAuth(app).currentUser;
+            setIsMe(message.user.id === authUser.uid);
+        }
+        checkIfMe();
+    }, []);
 
     return (
         <View style={[styles.container, isMe ? styles.rightContainer : styles.leftContainer ]}>
-            <Text style={{ color: isMe ? "black" : "white" }}>{message.content}</Text>
+            <Text style={{ color: isMe ? "white" : "black" }}>{message.content}</Text>
         </View>
     );
 };
@@ -21,12 +28,12 @@ const styles = StyleSheet.create({
         maxWidth: "75%",
     },
     leftContainer: {
-        backgroundColor: "#3777F0",
+        backgroundColor: "lightgrey",
         marginLeft: 10,
         marginRight: "auto",
     },
     rightContainer: {
-        backgroundColor: "lightgrey",
+        backgroundColor: "#3777F0",
         marginLeft: "auto",
         marginRight: 10,
     },

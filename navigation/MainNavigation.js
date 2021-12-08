@@ -29,6 +29,7 @@ export default function MainNavigator({ app }) {
                     headerTitle: () => <ChatRoomHeader app={app} id={route.params?.id} />,
                     headerBackTitleVisible: false,
                 })}
+                app={app}
             />
             <Stack.Screen
                 name="Users"

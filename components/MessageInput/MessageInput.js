@@ -1,17 +1,36 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Pressable, KeyboardAvoidingView, Platform } from "react-native";
 import { SimpleLineIcons, Feather, MaterialCommunityIcons, AntDesign, Ionicons } from "@expo/vector-icons";
+import { getDocs, query, collection, doc, setDoc, updateDoc, getFirestore, arrayUnion } from "@firebase/firestore";
+import { getAuth } from "@firebase/auth";
 import styles from './styles';
 
-const MessageInput = () => {
+const MessageInput = ({ app, chatRoom }) => {
     const [message, setMessage] = useState(null);
 
-    const sendMessage = () => {
-        console.warn("sending: ", message);
-        setMessage("");
+    const sendMessage = async () => {
+        console.log("sending: ", message);
+
+        const msg = {
+            id: 'M' + Date.now().toString(),
+            chatRoomID: chatRoom.id,
+            content: message,
+            createdAt: new Date().toLocaleString(),
+            user: { 
+                id: getAuth().currentUser.uid,
+                name: getAuth().currentUser.displayName,
+            }
+        }
+
+        await updateDoc(doc(getFirestore(app), 'rooms', chatRoom.id), {
+            messages: arrayUnion(msg),
+            lastMessage: msg,
+        })
+
+        resetFields();
     };
 
-    const onPlusClicked = () => {
+    const onPlusClicked = async () => {
         console.warn("on plus clicked");
     };
 
@@ -22,6 +41,10 @@ const MessageInput = () => {
             onPlusClicked();
         }
     };
+
+    const resetFields = () => {
+        setMessage("");
+    }
 
     return (
         <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={100}>
