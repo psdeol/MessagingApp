@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Image, Text, StyleSheet, FlatList, Pressable } from 'react-native';
 import ChatRoomItem from '../components/ChatRoomItem';
 import { getDocs, query, collection, onSnapshot, doc, setDoc, updateDoc, getFirestore, arrayUnion } from "@firebase/firestore";
-import { signOut, getAuth } from '@firebase/auth';
+import { getAuth } from '@firebase/auth';
 
 export default function HomeScreen({ app }) {
     const [rooms, setRooms] = useState(null);
@@ -31,13 +31,8 @@ export default function HomeScreen({ app }) {
         return () => {
             mounted = false;
         }
-        
-    }, []);    
 
-    const logout = async () => {
-        const auth = getAuth(app);
-        await signOut(auth);
-    }
+    }, []);    
 
     return (
         <View style={styles.page}>
@@ -45,11 +40,7 @@ export default function HomeScreen({ app }) {
                 data={rooms}
                 renderItem={({ item }) => <ChatRoomItem app={app} chatRoom={item}/>}
                 showsVerticalScrollIndicator={false}
-            />
-            <Pressable onPress={() => logout()} style={{backgroundColor: 'red', height: 50, margin: 10, borderRadius: 50, alignItems: 'center', justifyContent: 'center'}}>
-                <Text>Logout</Text>
-            </Pressable>
-        
+            />    
         </View>
     );
 }

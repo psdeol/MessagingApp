@@ -11,11 +11,18 @@ export default function Navigation({ app }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-            setUser(user);
-            setLoading(false);
+        let mounted = true;
+
+        onAuthStateChanged(getAuth(app), (user) => {
+            if (mounted) {
+                setUser(user);
+                setLoading(false);
+            }
         });
+
+        return () => {
+            mounted = false;
+        }
     }, []);
 
     if (loading) {

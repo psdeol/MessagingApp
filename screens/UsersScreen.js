@@ -8,19 +8,29 @@ export default function UsersScreen({ app }) {
     const [users, setUsers] = useState(null);
 
     useEffect(() => {
+        let mounted = true;
+
         const getUsers = async () => {
-            const db = getFirestore(app);
-            const authUser = getAuth(app).currentUser;
-            const querySnapshot = await getDocs(query(collection(db, "users")));
-            const usersList = [];
-            querySnapshot.forEach((doc) => {
-                // don't display current user
-                if (authUser.uid !== doc.data().id)
-                    usersList.push(doc.data());
-            });
-            setUsers(usersList);
+            const currentUser = getAuth(app).currentUser;
+            const q = query(collection(getFirestore(app), 'users'));
+
+            // listen for updates to users collection
+            const snapshot = onSnapshot(q, (querySnapshot) => {
+                const usersList = [];
+                querySnapshot.forEach((doc) => {
+                    // don't display current user
+                    if (currentUser.uid !== doc.data().id)
+                        usersList.push(doc.data());
+                })
+                if (mounted) setUsers(usersList);
+            })
         }
+
         getUsers();
+
+        return () => {
+            mounted = false;
+        }
     }, []);
 
     return (

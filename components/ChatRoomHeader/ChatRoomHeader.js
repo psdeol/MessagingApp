@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Image, Text, useWindowDimensions } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { getDoc, doc, getFirestore } from '@firebase/firestore';
 import { getAuth } from "@firebase/auth";
 
@@ -49,13 +49,14 @@ const ChatRoomHeader = ({ app, id }) => {
                 marginRight: 170,
             }}
         >
-        <Image
-            source={{ uri: user?.photoURL }}
-            style={{ width: 30, height: 30, borderRadius: 30 }}
-        />
-        <Text style={{ flex: 1, marginLeft: 10, fontWeight: "bold"}}> {user?.name} </Text>
-        <Feather name="camera" size={24} color="black" style={{ marginHorizontal: 10 }} />
-        <Feather name="edit-2" size={24} color="black" style={{ marginHorizontal: 10 }} />
+            <Image
+                source={{ uri: user?.photoURL }}
+                style={{ width: 30, height: 30, borderRadius: 30 }}
+            />
+            <Text style={{ flex: 1, marginLeft: 10, fontWeight: "bold"}}> {user?.name} </Text>
+            <Ionicons name="videocam" size={28} color="black" style={{ marginHorizontal: 7 }} />
+            <Ionicons name="call" size={24} color="black" style={{ marginHorizontal: 7 }} />
+            <Ionicons name="ellipsis-vertical" size={24} color="black" style={{ marginHorizontal: 7 }} />
         </View>
     );
 };
