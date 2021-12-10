@@ -5,6 +5,7 @@ import React from 'react';
 import ChatRoomScreen from '../screens/ChatRoomScreen';
 import HomeScreen from '../screens/HomeScreen';
 import UsersScreen from '../screens/UsersScreen';
+import UserProfileScreen from '../screens/UserProfileScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import HomeHeader from '../components/HomeHeader';
 import ChatRoomHeader from '../components/ChatRoomHeader';
@@ -33,6 +34,12 @@ export default function MainNavigator({ app }) {
                 name="Users"
                 component={UsersScreen}
                 options={{ title: "Users" }}
+                app={app}
+            />
+            <Stack.Screen 
+                name='UserProfile'
+                component={UserProfileScreen}
+                options={{ title: "User Profile" }}
                 app={app}
             />
             <Stack.Screen

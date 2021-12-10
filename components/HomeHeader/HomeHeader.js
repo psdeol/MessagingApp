@@ -17,13 +17,13 @@ const HomeHeader = ({ app }) => {
                 width,
                 padding: 10,
                 alignItems: "center",
-                marginRight: 64,
+                marginRight: 40,
             }}
         >
             <Pressable onPress={() => navigation.navigate('Settings')}>
                 <Image source={{ uri: user.photoURL }} style={{ width: 30, height: 30, borderRadius: 30 }} />
             </Pressable>
-            <Text style={{ flex: 1, textAlign: "center", marginLeft: 50, fontWeight: "bold" }} > Messaging App </Text>
+            <Text style={{ flex: 1, textAlign: "center", marginLeft: 45, fontWeight: "bold", fontSize: 16, }} > Messaging App </Text>
             <Feather name="camera" size={24} color="black" style={{ marginHorizontal: 10 }} />
             <Pressable onPress={() => navigation.navigate('Users')} >
                 <Feather name="edit-2" size={24} color="black" style={{ marginHorizontal: 10 }} />

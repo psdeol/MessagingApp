@@ -1,14 +1,16 @@
 import React from "react";
 import { View, Image, Text, Pressable } from 'react-native';
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation, useRoute } from "@react-navigation/core";
+import { StackActions } from "@react-navigation/native";
 import { getDocs, query, collection, doc, setDoc, updateDoc, getFirestore, arrayUnion } from "@firebase/firestore";
 import { getAuth } from "@firebase/auth";
 import styles from "./styles";
 
-export default function UserItem({ user, app }) {
+export default function UserItem({ user, app}) {
     const navigation = useNavigation();
+    const route = useRoute();
 
-    const onPress = async () => {
+    const openChat = async () => {
         const currentUser = {
             id: getAuth(app).currentUser.uid,
             email: getAuth(app).currentUser.email,
@@ -32,7 +34,7 @@ export default function UserItem({ user, app }) {
             let clickedUserFound = (users.filter(u => u.id === clickedUser.id).length > 0);
 
             // room found
-            if (currentUserFound && clickedUserFound) {
+            if (currentUserFound && clickedUserFound && users.length == 2) {
                 chatID = doc.data().id;
                 return;
             }
@@ -44,6 +46,7 @@ export default function UserItem({ user, app }) {
 
             await setDoc(doc(db, "rooms", chatID), {
                 id: chatID,
+                name: "",
                 createdAt: new Date().toLocaleString(),
                 users: [currentUser, clickedUser],
                 messages: [],
@@ -65,14 +68,48 @@ export default function UserItem({ user, app }) {
         navigation.navigate('ChatRoom', { id: chatID });
     }
 
+    const addToChatRoom = async () => {
+        if (!route?.params?.room) {
+            console.log('No room provided');
+            return;
+        }
+
+        const userToAdd = {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            photoURL: user.photoURL,
+        };
+
+        await updateDoc(doc(getFirestore(app), 'rooms', route.params.room.id), {
+            users: arrayUnion(userToAdd)
+        })
+
+        navigation.dispatch(StackActions.pop(1));
+    }
+
+    const openProfile = async () => {
+        navigation.navigate('UserProfile', { user: user });
+    }
+
+    const onPress = async () => {
+        if (route?.params?.addToChatRoom)
+            addToChatRoom();
+        else if (route?.params?.openProfile)
+            openProfile();
+        else
+            openChat();
+    }
+
     return (
         <Pressable onPress={() => onPress()} style={styles.container}>
-        <Image source={{ uri: user.photoURL }} style={styles.image} />
-        <View style={styles.rightContainer}>
-            <View style={styles.row}>
-            <Text style={styles.name}>{user.name}</Text>
+            <Image source={{ uri: user.photoURL }} style={styles.image} />
+            <View style={styles.rightContainer}>
+                <View style={styles.row}>
+                    <Text style={styles.name}>{user.name}</Text>
+                </View>
+                <Text numberOfLines={1} style={styles.text}>Put user's status here</Text>
             </View>
-        </View>
         </Pressable>
     );
 }

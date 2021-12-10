@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { getAuth } from "@firebase/auth";
 
-const Message = ({ app, message }) => {
+const Message = ({ app, message, isGroupChat }) => {
     const [isMe, setIsMe] = useState(true);
 
     useEffect(() => {
@@ -13,11 +13,34 @@ const Message = ({ app, message }) => {
         checkIfMe();
     }, []);
 
-    return (
-        <View style={[styles.container, isMe ? styles.rightContainer : styles.leftContainer ]}>
-            <Text style={{ color: isMe ? "white" : "black" }}>{message.content}</Text>
-        </View>
-    );
+    
+    if (!isGroupChat) {
+        return (
+            <View style={[styles.container, isMe ? styles.rightContainer : styles.leftContainer ]}>
+                <Text style={{ color: isMe ? "white" : "black" }}>{message.content}</Text>
+            </View>
+        );
+    } else {
+        return (
+            <View>
+            { isMe ?
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end',  }}>
+                    <View style={[styles.container, styles.groupRightContainer]}>
+                        <Text style={{ color: isMe ? "white" : "black" }}>{message.content}</Text>
+                    </View>
+                    <Image source={{ uri: message.user.photoURL }} style={styles.rightImage} />
+                </View>
+                :
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', }}>
+                    <Image source={{ uri: message.user.photoURL }} style={styles.leftImage} />
+                    <View style={[styles.container, styles.groupLeftContainer]}>
+                        <Text style={{ color: isMe ? "white" : "black" }}>{message.content}</Text>
+                    </View>
+                </View>
+            }
+            </View>
+        );
+    }
 };
 
 const styles = StyleSheet.create({
@@ -25,10 +48,10 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 10,
         borderRadius: 10,
-        maxWidth: "75%",
+        maxWidth: "69%",
     },
     leftContainer: {
-        backgroundColor: "lightgrey",
+        backgroundColor: "#dedede",
         marginLeft: 10,
         marginRight: "auto",
     },
@@ -36,6 +59,30 @@ const styles = StyleSheet.create({
         backgroundColor: "#3777F0",
         marginLeft: "auto",
         marginRight: 10,
+    },
+    groupLeftContainer: {
+        backgroundColor: "#dedede",
+        marginLeft: 5,
+        marginRight: "auto",
+    },
+    groupRightContainer: {
+        backgroundColor: "#3777F0",
+        marginLeft: "auto",
+        marginRight: 5,
+    },
+    leftImage: {
+        width: 20, 
+        height: 20,
+        borderRadius: 10,
+        marginBottom: 10,
+        marginLeft: 5,
+    },
+    rightImage: {
+        width: 20, 
+        height: 20,
+        borderRadius: 10,
+        marginBottom: 10,
+        marginRight: 5,
     },
 });
 

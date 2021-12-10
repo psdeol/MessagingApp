@@ -37,10 +37,10 @@ export default function RegistrationScreen({ navigation, app }) {
             const auth = getAuth(app);
             await createUserWithEmailAndPassword(auth, email, password);
             const currentUser = auth.currentUser;
-            let num = Math.floor(Math.random() * (200 - 1 + 1)) + 1;
+            let num = Math.floor(Math.random() * (300 - 1 + 1)) + 1;
             await updateProfile(currentUser, {
                 displayName: name,
-                photoURL: `https://picsum.photos/id/${num}/300/300`
+                photoURL: `https://picsum.photos/id/${num}/300/300`,
             })
             
             const db = getFirestore(app);
@@ -49,6 +49,7 @@ export default function RegistrationScreen({ navigation, app }) {
                 email: currentUser.email,
                 name: currentUser.displayName,
                 photoURL: currentUser.photoURL,
+                status: `Hello, I'm ${currentUser.displayName}!`,
                 rooms: [],
             });
             
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
         borderColor: "black"
     },
     button: {
-        backgroundColor: '#788eec',
+        backgroundColor: '#3777F0',
         marginLeft: 30,
         marginRight: 30,
         marginTop: 20,
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
         color: '#ffffff'
     },
     footerLink: {
-        color: "#788eec",
+        color: "#3777F0",
         fontWeight: "bold",
         fontSize: 16
     }

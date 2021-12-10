@@ -10,6 +10,7 @@ const MessageInput = ({ app, chatRoom }) => {
 
     const sendMessage = async () => {
         console.log("sending: ", message);
+        const currentUser = getAuth(app).currentUser;
 
         const msg = {
             id: 'M' + Date.now().toString(),
@@ -17,8 +18,9 @@ const MessageInput = ({ app, chatRoom }) => {
             content: message,
             createdAt: new Date().toLocaleString(),
             user: { 
-                id: getAuth().currentUser.uid,
-                name: getAuth().currentUser.displayName,
+                id: currentUser.uid,
+                name: currentUser.displayName,
+                photoURL: currentUser.photoURL,
             }
         }
 

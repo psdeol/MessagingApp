@@ -9,6 +9,7 @@ import MessageInput from "../components/MessageInput";
 export default function ChatRoomScreen({ app }) {
     const [messages, setMessages] = useState(null);
     const [chatRoom, setChatRoom] = useState(null);
+    const [groupChat, setGroupChat] = useState(false);
     const route = useRoute();
     const navigation = useNavigation();
 
@@ -25,6 +26,7 @@ export default function ChatRoomScreen({ app }) {
                 if (mounted) {
                     setChatRoom(doc.data());
                     setMessages(doc.data().messages.reverse());
+                    setGroupChat(doc.data().users.length > 2);
                 }
             });
         }
@@ -44,7 +46,7 @@ export default function ChatRoomScreen({ app }) {
         <SafeAreaView style={styles.page}>
             <FlatList
                 data={messages}
-                renderItem={({ item }) => <Message app={app} message={item} />} 
+                renderItem={({ item }) => <Message app={app} message={item} isGroupChat={groupChat} />} 
                 inverted
             />
             <MessageInput app={app} chatRoom={chatRoom} />

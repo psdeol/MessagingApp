@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     },
     loginButton: {
         width: "80%",
-        backgroundColor: '#788eec',
+        backgroundColor: '#3777F0',
         marginLeft: 30,
         marginRight: 30,
         marginBottom: 20,
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f0f0f0',
         marginLeft: 30,
         marginRight: 30,
-        marginBottom: 50,
+        marginBottom: 80,
         height: 48,
         borderRadius: 5,
         alignItems: "center",
@@ -81,6 +81,6 @@ const styles = StyleSheet.create({
     registerButtonText: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#788eec',
+        color: '#3777F0',
     }
 })
