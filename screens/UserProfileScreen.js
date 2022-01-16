@@ -15,6 +15,7 @@ export default function UserProfileScreen({ app }) {
             console.log('No user provided');
             return;
         }
+
         setUser(route.params.user);
     }, [])
 
@@ -41,7 +42,7 @@ export default function UserProfileScreen({ app }) {
                     </View>
                 </View>
                 <View style={{ backgroundColor: 'white', marginVertical: 1 }}>
-                    <Text style={styles.status}>The user's status will go here probably </Text>
+                    <Text style={styles.status}>{user?.status}</Text>
                 </View>
                 <Pressable style={{ backgroundColor: 'white', marginTop: 40, marginBottom: 1, alignItems: 'center' }}>
                     <Text style={{ color: 'red', fontSize: 18, padding: 15}}>Block User </Text>

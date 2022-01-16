@@ -2,7 +2,7 @@ import React from "react";
 import { View, Image, Text, Pressable } from 'react-native';
 import { useNavigation, useRoute } from "@react-navigation/core";
 import { StackActions } from "@react-navigation/native";
-import { getDocs, query, collection, doc, setDoc, updateDoc, getFirestore, arrayUnion } from "@firebase/firestore";
+import { getDoc, getDocs, query, collection, doc, setDoc, updateDoc, getFirestore, arrayUnion } from "@firebase/firestore";
 import { getAuth } from "@firebase/auth";
 import styles from "./styles";
 
@@ -11,22 +11,31 @@ export default function UserItem({ user, app}) {
     const route = useRoute();
 
     const openChat = async () => {
+        const currentUserDoc = await getDoc(doc(getFirestore(app), 'users', getAuth(app).currentUser.uid));
+
+        if (!currentUserDoc.exists) {
+            console.log('Current user doc not found');
+            return;
+        }
+
         const currentUser = {
-            id: getAuth(app).currentUser.uid,
-            email: getAuth(app).currentUser.email,
-            name: getAuth(app).currentUser.displayName,
-            photoURL: getAuth(app).currentUser.photoURL,
+            id: currentUserDoc.data().id,
+            email: currentUserDoc.data().email,
+            name: currentUserDoc.data().name,
+            photoURL: currentUserDoc.data().photoURL,
+            status: currentUserDoc.data().status,
         };
         const clickedUser = {
             id: user.id,
             email: user.email,
             name: user.name,
             photoURL: user.photoURL,
+            status: user.status,
         };
         const db = getFirestore(app);
         let chatID = null;
 
-        // check a room already exists between these two users
+        // check if a room already exists between these two users
         const querySnapshot = await getDocs(query(collection(db, "rooms")));
         querySnapshot.forEach((doc) => {
             let users = doc.data().users;

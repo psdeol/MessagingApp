@@ -37,7 +37,7 @@ export default function RegistrationScreen({ navigation, app }) {
             const auth = getAuth(app);
             await createUserWithEmailAndPassword(auth, email, password);
             const currentUser = auth.currentUser;
-            let num = Math.floor(Math.random() * (300 - 1 + 1)) + 1;
+            let num = Math.floor(Math.random() * (250 - 1 + 1)) + 1;
             await updateProfile(currentUser, {
                 displayName: name,
                 photoURL: `https://picsum.photos/id/${num}/300/300`,

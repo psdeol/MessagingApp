@@ -28,7 +28,6 @@ const Message = ({ app, message, isGroupChat }) => {
                     <View style={[styles.container, styles.groupRightContainer]}>
                         <Text style={{ color: isMe ? "white" : "black" }}>{message.content}</Text>
                     </View>
-                    <Image source={{ uri: message.user.photoURL }} style={styles.rightImage} />
                 </View>
                 :
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', }}>
@@ -68,12 +67,12 @@ const styles = StyleSheet.create({
     groupRightContainer: {
         backgroundColor: "#3777F0",
         marginLeft: "auto",
-        marginRight: 5,
+        marginRight: 10,
     },
     leftImage: {
-        width: 20, 
-        height: 20,
-        borderRadius: 10,
+        width: 25, 
+        height: 25,
+        borderRadius: 12.5,
         marginBottom: 10,
         marginLeft: 5,
     },
